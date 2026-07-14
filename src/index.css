@@ -218,3 +218,17 @@ canvas {
   animation: shooting-star 14s linear infinite;
   will-change: transform;
 }
+
+/* Retro CRT Scanlines shader */
+.bg-scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.3) 50%
+  ), linear-gradient(
+    90deg, 
+    rgba(255, 0, 0, 0.04), 
+    rgba(0, 255, 0, 0.01), 
+    rgba(0, 0, 255, 0.04)
+  );
+  background-size: 100% 4px, 6px 100%;
+}

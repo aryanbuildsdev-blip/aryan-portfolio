@@ -65,6 +65,7 @@ import Preloader from './components/Preloader';
 import HeroScene from './components/HeroScene';
 import ProjectModal from './components/ProjectModal';
 import AIAssistant from './components/AIAssistant';
+import DeveloperTerminal from './components/DeveloperTerminal';
 
 // Interactive 3D Tilting Card wrapper for categories
 function InteractiveSkillsCard({ title, accentColor, children }) {
@@ -404,6 +405,7 @@ export default function App() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [globalCoords, setGlobalCoords] = useState({ x: 0, y: 0 });
   const [copied, setCopied] = useState(false);
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText("aryanpre4906@gmail.com");
@@ -637,13 +639,26 @@ export default function App() {
                 <a href="#contact" className="hover:text-white transition-colors py-1 relative">Contact</a>
               </nav>
 
-              {/* CTA Button */}
-              <a 
-                href="#contact" 
-                className="text-[9px] md:text-xs uppercase tracking-widest bg-gradient-to-r from-violet-600 to-cyan-500 hover:opacity-95 text-white px-4 py-2 md:px-5 md:py-2.5 rounded-full transition-all font-semibold font-display shadow-lg shadow-violet-500/10 hover:shadow-cyan-500/10 cursor-pointer"
-              >
-                Get in Touch
-              </a>
+              {/* CTA & Console trigger Group */}
+              <div className="flex items-center gap-3">
+                {/* Interactive Developer CLI console toggle */}
+                <button
+                  onClick={() => setIsTerminalOpen(true)}
+                  data-cursor="hover"
+                  className="w-8 h-8 md:w-9 md:h-9 rounded-full border border-white/10 bg-white/5 text-gray-400 hover:text-green-400 hover:border-green-500/30 flex items-center justify-center transition-all cursor-pointer shadow-md hover:shadow-green-500/5 pointer-events-auto"
+                  title="Open Developer Console"
+                >
+                  <Terminal size={14} className="md:size-[16px]" />
+                </button>
+
+                {/* CTA Button */}
+                <a 
+                  href="#contact" 
+                  className="text-[9px] md:text-xs uppercase tracking-widest bg-gradient-to-r from-violet-600 to-cyan-500 hover:opacity-95 text-white px-4 py-2 md:px-5 md:py-2.5 rounded-full transition-all font-semibold font-display shadow-lg shadow-violet-500/10 hover:shadow-cyan-500/10 cursor-pointer"
+                >
+                  Get in Touch
+                </a>
+              </div>
             </motion.header>
           </div>
 
@@ -1183,6 +1198,12 @@ export default function App() {
 
           {/* Floating AI Portfolio Assistant */}
           <AIAssistant />
+
+          {/* Retro Developer Console Terminal Modal */}
+          <DeveloperTerminal 
+            isOpen={isTerminalOpen}
+            onClose={() => setIsTerminalOpen(false)}
+          />
         </>
       )}
     </div>
