@@ -394,6 +394,8 @@ function ProjectCard({ proj, onClick }) {
   );
 }
 
+const WEB3FORMS_ACCESS_KEY = "ab60fa03-2087-456c-9bc0-42ef70434534";
+
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [activeProject, setActiveProject] = useState(null);
@@ -522,18 +524,35 @@ export default function App() {
     };
 
     try {
-      const response = await fetch("https://formsubmit.co/ajax/aryanpre4906@gmail.com", {
+      // Determine if a Web3Forms Key is configured (reliable edge routing)
+      const useWeb3Forms = WEB3FORMS_ACCESS_KEY && WEB3FORMS_ACCESS_KEY !== "YOUR_WEB3FORMS_KEY_HERE";
+      
+      const endpoint = useWeb3Forms 
+        ? "https://api.web3forms.com/submit" 
+        : "https://formsubmit.co/ajax/aryanpre4906@gmail.com";
+        
+      const payload = useWeb3Forms 
+        ? {
+            access_key: WEB3FORMS_ACCESS_KEY,
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+            subject: `New Portfolio Query from ${formData.name}`
+          }
+        : {
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+            _subject: `New Portfolio Query from ${formData.name}`
+          };
+
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json"
         },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          message: formData.message,
-          _subject: `New Portfolio Query from ${formData.name}`
-        })
+        body: JSON.stringify(payload)
       });
 
       if (response.ok) {
@@ -541,11 +560,11 @@ export default function App() {
         setFormData({ name: '', email: '', message: '' });
         setTimeout(() => setFormSubmitted(false), 6000);
       } else {
-        console.warn("FormSubmit returned non-ok status, falling back to mailto");
+        console.warn("Mail api returned non-ok status, falling back to mailto");
         triggerMailtoFallback();
       }
     } catch (error) {
-      console.error("Form submit network error, falling back to mailto:", error);
+      console.error("Mail submit network error, falling back to mailto:", error);
       triggerMailtoFallback();
     } finally {
       setFormSending(false);
